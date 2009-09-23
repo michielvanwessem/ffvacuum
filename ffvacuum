@@ -1,0 +1,7 @@
+#!/bin/bash
+
+
+
+
+
+for i in *.sqlite; do echo "VACUUM;" | sqlite3 $i ; done
