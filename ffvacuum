@@ -1,7 +1,25 @@
 #!/bin/bash
 
+# Make sure sqlite3 is installed on the system.
+if [[ -x $(which sqlite3) ]]; then
+    echo "sqlite3 not found or non executable..."
+    exit 1
+fi
 
+# Make sure we are dealing with firefox3
+ffmajor=$(/usr/bin/firefox --version | awk '{ print $3 }' | awk -F. '{ print $1}')
+if [[ ${ffmajor} -ne 3 ]]; then
+    echo "Firefox is not the right version, we need version 3..."
+    exit 1
+fi
 
-
-
-for i in *.sqlite; do echo "VACUUM;" | sqlite3 $i ; done
+# Let's do the magic.
+( cd ${HOME}/.mozilla/firefox
+  for profiles in *.*/ ; do
+    ( cd ${profiles}
+      for database in *.sqlite; do
+        echo "VACUUM;" | sqlite3 ${database} 
+       done
+    )
+  done
+)
