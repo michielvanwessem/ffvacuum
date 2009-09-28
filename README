@@ -1,0 +1,15 @@
+ffvacuum is a simple shell script that will clean the 
+sqlite3 databases that form the backend of 
+Mozilla Firefox 3.
+
+Having database store your browsing data has one drawback, 
+you have to optimize the database from time to time to get 
+rid of old, deleted data, re-index the columns etc. 
+Otherwise you keep all the junk data mixed in with your 
+real data
+
+The idea behind this is not mine but was posted by 
+http://www.gettingclever.com
+
+I just wrote the testcases and scripting around it.
+
