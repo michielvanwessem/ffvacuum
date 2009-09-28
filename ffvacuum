@@ -1,7 +1,9 @@
 #!/bin/bash
 
+# based on http://www.gettingclever.com/2008/06/vacuum-your-firefox-3.html
+
 # Make sure sqlite3 is installed on the system.
-if [[ -x $(which sqlite3) ]]; then
+if [ ! -x $(which sqlite3) ]; then
     echo "sqlite3 not found or non executable..."
     exit 1
 fi
