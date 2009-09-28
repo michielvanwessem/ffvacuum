@@ -24,16 +24,17 @@
 
 # based on http://www.gettingclever.com/2008/06/vacuum-your-firefox-3.html
 
-# 
-verbose=${verbose:-YES}
+# Make it being VERBOSE by default.
+VERBOSE=${VERBOSE:-YES}
 
 # set some bold/bright ANSI colours
 red="\033[01;31m"
 green="\033[01;32m"
 blue="\033[01;34m"
 normal="\033[00m"
+
 # Make sure sqlite3 is installed on the system.
-if [ ! -x $(which sqlite3) ]; then
+if [[ ! -x $(which sqlite3) ]]; then
     echo "sqlite3 not found or non executable..."
     exit 1
 fi
@@ -47,20 +48,27 @@ fi
 
 # Let's do the magic.
 ( cd ${HOME}/.mozilla/firefox
-  for profiles in *.*/ ; do
+for profiles in *.*/ ; do
     ( cd ${profiles}
-      echo "${profiles} --"
-      for database in *.sqlite; do
-        printf "%12s %-54s" Vaccuuming ${database}...
-        echo "VACUUM;" | sqlite3 ${database}
-        
-        status=$?
-        if [[ ${status} -eq 0 ]]; then
-          echo -e "${blue}[ ${green}cleaned${blue} ]${normal}"
+    echo "Cleaning up ${profiles} --"
+
+    for database in *.sqlite; do
+        if [[ ${VERBOSE} = "YES" ]]; then
+            
+            printf "%12s %-54s" Vaccuuming ${database}...
+            echo "VACUUM;" | sqlite3 ${database}
+            
+            status=$?
+            
+            if [[ ${status} -eq 0 ]]; then
+                echo -e "${blue}[ ${green}cleaned${blue} ]${normal}"
+            else
+                echo -e "${blue}[ ${red}failed${blue} ]${normal}"
+            fi
         else
-          echo -e "${blue}[ ${red}failed${blue} ]${normal}"
+            echo "VACUUM;" | sqlite3 ${database}
         fi
-      done
+    done
     )
-  done
+done
 )
