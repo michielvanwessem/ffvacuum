@@ -19,7 +19,9 @@ fi
 ( cd ${HOME}/.mozilla/firefox
   for profiles in *.*/ ; do
     ( cd ${profiles}
+      echo "${profiles} --"
       for database in *.sqlite; do
+        echo "  Vacuuming ${database}..."
         echo "VACUUM;" | sqlite3 ${database} 
        done
     )
