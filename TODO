@@ -1,0 +1,3 @@
+Find a way to catch the error message and print out which files
+fail to be cleaned (usually in case firefox is still running)
+
