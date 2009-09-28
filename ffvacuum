@@ -23,6 +23,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 # based on http://www.gettingclever.com/2008/06/vacuum-your-firefox-3.html
+# ffvaccuum is a bash script that cleans up your firefox3 databases.
 
 # Make it being VERBOSE by default.
 VERBOSE=${VERBOSE:-YES}
@@ -48,27 +49,27 @@ fi
 
 # Let's do the magic.
 ( cd ${HOME}/.mozilla/firefox
-for profiles in *.*/ ; do
+  for profiles in *.*/ ; do
     ( cd ${profiles}
-    echo "Cleaning up ${profiles} --"
+      echo "Cleaning up ${profiles} --"
 
-    for database in *.sqlite; do
+      for database in *.sqlite; do
         if [[ ${VERBOSE} = "YES" ]]; then
             
-            printf "%12s %-54s" Vaccuuming ${database}...
-            echo "VACUUM;" | sqlite3 ${database}
-            
+            printf "%12s %-54s" Vaccuuming ${database}... 
+
+            echo "VACUUM;" | sqlite3 ${database} >/dev/null 2>&1
             status=$?
             
             if [[ ${status} -eq 0 ]]; then
                 echo -e "${blue}[ ${green}cleaned${blue} ]${normal}"
             else
-                echo -e "${blue}[ ${red}failed${blue} ]${normal}"
+                echo -e "${blue}[ ${red}failed${blue}  ]${normal}"
             fi
         else
             echo "VACUUM;" | sqlite3 ${database}
         fi
-    done
+      done
     )
 done
 )
