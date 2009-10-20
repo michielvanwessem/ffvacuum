@@ -50,15 +50,15 @@ fi
 # Let's do the magic.
 ( cd ${HOME}/.mozilla/firefox
   for profiles in *.*/ ; do
-    ( cd ${profiles}
-      echo "Cleaning up ${profiles} --"
+    ( cd "${profiles}"
+      echo "Cleaning up \"${profiles}\" --"
 
       for database in *.sqlite; do
         if [[ ${VERBOSE} = "YES" ]]; then
             
-            printf "%12s %-54s" Vaccuuming ${database}... 
+            printf "%12s %-54s" Vaccuuming \"${database}\" ... 
 
-            echo "VACUUM;" | sqlite3 ${database} >/dev/null 2>&1
+            echo "VACUUM;" | sqlite3 "${database}" >/dev/null 2>&1
             status=$?
             
             if [[ ${status} -eq 0 ]]; then
@@ -67,7 +67,7 @@ fi
                 echo -e "${blue}[ ${red}failed${blue}  ]${normal}"
             fi
         else
-            echo "VACUUM;" | sqlite3 ${database}
+            echo "VACUUM;" | sqlite3 "${database}"
         fi
       done
     )
