@@ -48,28 +48,38 @@ if [[ ${ffmajor} -ne 3 ]]; then
 fi
 
 # Let's do the magic.
-( cd ${HOME}/.mozilla/firefox
-  for profiles in *.*/ ; do
-    ( cd "${profiles}"
-      echo "Cleaning up \"${profiles}\" --"
+( cd ${HOME}/.mozilla/
+  for browser in {firefox,seamonkey}; do
 
-      for database in *.sqlite; do
-        if [[ ${VERBOSE} = "YES" ]]; then
-            
-            printf "%12s %-54s" Vaccuuming \"${database}\" ... 
+    if [[ -e ${browser} ]]; then
+      ( cd $browser
+        echo "Cleaning started on $browser"
 
-            echo "VACUUM;" | sqlite3 "${database}" >/dev/null 2>&1
-            status=$?
-            
-            if [[ ${status} -eq 0 ]]; then
-                echo -e "${blue}[ ${green}cleaned${blue} ]${normal}"
-            else
-                echo -e "${blue}[ ${red}failed${blue}  ]${normal}"
-            fi
-        else
-            echo "VACUUM;" | sqlite3 "${database}"
-        fi
-      done
-    )
-done
+        for profiles in *.*/ ; do
+          ( cd "${profiles}"
+            echo "  Found profile in \"${profiles}\". Start cleaning..."
+ 
+            for database in *.sqlite; do
+              if [[ ${VERBOSE} = "YES" ]]; then
+                printf "%13s %-30s %10s %11s" Vaccuuming \"${database}\" ... 
+
+                echo "VACUUM;" | sqlite3 "${database}" >/dev/null 2>&1
+                status=$?
+
+                if [[ ${status} -eq 0 ]]; then
+                  echo -e "${blue}[ ${green}cleaned${blue} ]${normal}"
+                else
+                  echo -e "${blue}[ ${red}failed${blue}  ]${normal}"
+                fi
+              else
+                echo "VACUUM;" | sqlite3 "${database}"
+              fi  
+            done
+          )
+        done
+      )
+    fi
+  done
 )
+
+#EOF
