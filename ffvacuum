@@ -40,10 +40,10 @@ if [[ ! -x $(which sqlite3) ]]; then
     exit 1
 fi
 
-# Make sure we are dealing with firefox4
+# Make sure we are dealing with firefox 3 or higher.
 ffmajor=$($(which firefox) --version | awk '{ print $3 }' | awk -F. '{ print $1}')
-if [[ ${ffmajor} -ne 4 ]]; then
-    echo "Firefox is not the right version, we need version 4..."
+if [[ ${ffmajor} -gt 2 ]]; then
+    echo "Firefox is not the right version, we need firefox3, firefox4 or newer..."
     exit 1
 fi
 
