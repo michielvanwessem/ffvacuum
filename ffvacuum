@@ -47,6 +47,13 @@ if [[ ${ffmajor} -lt 2 ]]; then
     exit 1
 fi
 
+# Before we start, let's make sure that the browser is no longer running.
+if ps aux | grep -v grep | grep firefox-bin; then
+    echo "Error, Firefox appears to be still running."
+    echo "Please shut down firefox /before/ cleaning the database."
+    exit 1
+fi
+
 # Let's do the magic.
 ( cd ${HOME}/.mozilla/
   for browser in {firefox,seamonkey}; do
