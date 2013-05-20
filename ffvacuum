@@ -42,13 +42,13 @@ fi
 
 # Make sure we are dealing with firefox 3 or higher.
 ffmajor=$($(which firefox) --version | awk '{ print $3 }' | awk -F. '{ print $1}')
-if [[ ${ffmajor} -lt 2 ]]; then
+if [[ ${ffmajor} -lt 3 ]]; then
     echo "Firefox is not the right version, we need firefox3, firefox4 or newer..."
     exit 1
 fi
 
 # Before we start, let's make sure that the browser is no longer running.
-if ps aux | grep -v grep | grep firefox-bin; then
+if ps aux | grep -v grep | grep firefox; then
     echo "Error, Firefox appears to be still running."
     echo "Please shut down firefox /before/ cleaning the database."
     exit 1
